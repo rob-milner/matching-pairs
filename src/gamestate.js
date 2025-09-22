@@ -1,73 +1,46 @@
-import { initCards, shuffleCards, drawCards, cards } from "./cards";
+import { Loading } from "./Loading";
+import { TitleScreen } from "./TitleScreen";
+import { Game } from "./Game";
 
-export let gameState = "loading";
-
-let score = 0;
-
-const status = document.querySelector("#status");
-
-export const updateGameState = (state) => {
-  gameState = state;
-  switch (gameState) {
-    case "loading":
-      drawLoadingScreen();
-      break;
-    case "titleScreen":
-      drawTitleScreen();
-      break;
-    case "playing":
-      newGame();
-      break;
+export class GameState {
+  constructor() {
+    this.state = "";
+    this.sprite = null;
+    this.name = "";
   }
-};
 
-const loading = document.querySelector("#loading");
-const titleScreen = document.querySelector("#title-screen");
-const game = document.querySelector("#game");
-let name = "";
-
-const drawLoadingScreen = () => {
-  loading.style.display = "block";
-};
-
-const drawTitleScreen = () => {
-  loading.style.display = "none";
-  titleScreen.style.display = "block";
-
-  document.querySelector("#start").addEventListener("click", () => {
-    name = document.querySelector("#name").value;
-    updateGameState("playing");
-  });
-};
-
-const newGame = () => {
-  titleScreen.style.display = "none";
-
-  score = 0;
-  shuffleCards();
-  drawCards();
-  updateStatus();
-
-  game.style.display = "flex";
-};
-
-export const updateStatus = () => {
-  if (cards.every((card) => card.status === "matched")) {
-    status.innerHTML = `<div>${name} wins! Score: ${score}</div><button id="restart">Play again</button>`;
-    document.querySelector("#restart").addEventListener("click", newGame);
-  } else {
-    status.appendChild(
-      document.createElement("div", { textContent: `${name}: ${score}` })
-    );
-    document.querySelector("#status").innerHTML = `${name}: ${score}`;
+  handleNameChanged(name) {
+    this.name = name;
   }
-};
 
-export const initGame = () => {
-  updateGameState("loading");
-  initCards();
-};
+  handleStartGame() {
+    this.updateState("playing");
+  }
 
-export const updateScore = () => {
-  score++;
-};
+  async updateState(state) {
+    this.state = state;
+
+    switch (state) {
+      case "loading": {
+        const loading = new Loading();
+        loading.render();
+        this.sprite = await loading.init();
+        this.updateState("titleScreen");
+        break;
+      }
+      case "titleScreen": {
+        const titleScreen = new TitleScreen({
+          onNameChanged: (name) => this.handleNameChanged(name),
+          onStartGame: () => this.handleStartGame(),
+        });
+        titleScreen.render();
+        break;
+      }
+      case "playing": {
+        const game = new Game({ name: this.name, sprite: this.sprite });
+        game.newGame();
+        break;
+      }
+    }
+  }
+}

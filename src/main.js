@@ -1,4 +1,15 @@
 import "./style.css";
-import { initGame } from "./gamestate";
+import { GameState } from "./GameState";
 
-initGame();
+class Game {
+  constructor() {
+    this.gameState = new GameState();
+  }
+
+  init() {
+    this.gameState.updateState("loading");
+  }
+}
+
+const game = new Game();
+game.init();
