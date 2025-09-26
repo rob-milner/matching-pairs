@@ -1,33 +1,26 @@
-import { Loading } from "./Loading";
 import { TitleScreen } from "./TitleScreen";
-import { Game } from "./Game";
+import { Cards } from "./Cards";
 
 export class GameState {
   constructor() {
     this.state = "";
-    this.sprite = null;
     this.name = "";
+    this.numberOfPlayers = 1;
   }
 
   handleNameChanged(name) {
     this.name = name;
   }
 
-  handleStartGame() {
+  handleStartGame(numberOfPlayers) {
     this.updateState("playing");
+    this.numberOfPlayers = numberOfPlayers;
   }
 
   async updateState(state) {
     this.state = state;
 
     switch (state) {
-      case "loading": {
-        const loading = new Loading();
-        loading.render();
-        this.sprite = await loading.init();
-        this.updateState("titleScreen");
-        break;
-      }
       case "titleScreen": {
         const titleScreen = new TitleScreen({
           onNameChanged: (name) => this.handleNameChanged(name),
@@ -37,8 +30,14 @@ export class GameState {
         break;
       }
       case "playing": {
-        const game = new Game({ name: this.name, sprite: this.sprite });
-        game.newGame();
+        const game = new Cards({
+          name: this.name,
+        });
+        if (this.numberOfPlayers === 2) {
+          game.newMultiplayerGame();
+        } else {
+          game.newGame();
+        }
         break;
       }
     }

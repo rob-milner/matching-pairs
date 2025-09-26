@@ -7,7 +7,7 @@ class Game {
   }
 
   init() {
-    this.gameState.updateState("loading");
+    this.gameState.updateState("titleScreen");
   }
 }
 

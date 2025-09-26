@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+dependencies:
+  crel:
+    specifier: ^4.2.1
+    version: 4.2.1
+
 devDependencies:
   vite:
     specifier: ^7.1.2
@@ -416,6 +421,10 @@ packages:
   /@types/estree@1.0.8:
     resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
     dev: true
+
+  /crel@4.2.1:
+    resolution: {integrity: sha512-OwBkgtd+opoS7vrpnYrUOBlWnR0ZzLOwM5Vh07ZbcBlbSboonYBzDGaKjjnal56Mqz4q7A2wjb1J9by8GYMC2A==}
+    dev: false
 
   /esbuild@0.25.9:
     resolution: {integrity: sha512-CRbODhYyQx3qp7ZEwzxOk4JBqmD/seJrzPa/cGjY1VtIn5E09Oi9/dB4JwctnfZ8Q8iT7rioVv5k/FNT/uf54g==}
